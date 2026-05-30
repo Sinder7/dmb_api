@@ -1,0 +1,24 @@
+import uvicorn 
+from fastapi import FastAPI
+from pydantic import BaseModel
+
+from dmb_days import demobilization
+
+app = FastAPI(
+    title="dmb timer",
+    version='0.0.1'
+)
+
+class CallupDate(BaseModel):
+    callup_date: str
+    
+    
+    
+@app.get("/{callup_date")
+async def dmb_days_get(callup_date: str) -> dict:
+    remaining_days = await demobilization(callup_date)
+    return {"message": f"Осталось {remaining_days} до дембеля"}
+    
+    
+
+uvicorn.run("main:app", reload=True)
